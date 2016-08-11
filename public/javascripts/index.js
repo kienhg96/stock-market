@@ -2,7 +2,7 @@ var names = [];
 var seriesOptions = [];
 var currentDate = new Date(new Date().toJSON().split('T')[0]);
 var endDate = currentDate.toJSON().split('T')[0];
-var startDate = new Date(currentDate - 2592000000).toJSON().split('T')[0];
+var startDate = new Date(currentDate - 31536000000).toJSON().split('T')[0];31536000000
 $(document).ready(function(){
 	var seriesCounter = 0;
 	var container = $('#container');
@@ -27,6 +27,10 @@ $(document).ready(function(){
 					color: 'silver'
 				}]
 			},
+			tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+                valueDecimals: 2
+            },
 			series: seriesOptions
 		});
 	}
@@ -34,8 +38,8 @@ $(document).ready(function(){
 	var loadAndRender = function(){
 		seriesCounter = 0;
 		$.each(names, function(i, name){
-			var url = 'https://www.quandl.com/api/v3/datasets/WIKI/' + name.toUpperCase() +'/data.json?start_date=' + startDate + '?end_date=' + endDate + '?api_key=hWzSahCAq5PA14G65hh3';
-			console.log(url);
+			var url = 'https://www.quandl.com/api/v3/datasets/WIKI/' + name.toUpperCase() +'/data.json?start_date=' + startDate + '&end_date=' + endDate + '&api_key=hWzSahCAq5PA14G65hh3';
+			//console.log(url);
 			$.getJSON(url, function(json){
 				var data = json.dataset_data.data.map(function(elem){
                 	return [new Date(elem[0]).getTime(), elem[1]];
@@ -81,7 +85,7 @@ $(document).ready(function(){
 			'</div>';
 		$('#item').append(str);
 		names.push(name);
-		var url = 'https://www.quandl.com/api/v3/datasets/WIKI/' + name.toUpperCase() +'/data.json?start_date=' + startDate + '?end_date=' + endDate + '?api_key=hWzSahCAq5PA14G65hh3';
+		var url = 'https://www.quandl.com/api/v3/datasets/WIKI/' + name.toUpperCase() +'/data.json?start_date=' + startDate + '&end_date=' + endDate + '&api_key=hWzSahCAq5PA14G65hh3';
 			//console.log(url);
 		$.getJSON(url, function(json){
 			var data = json.dataset_data.data.map(function(elem){
@@ -102,6 +106,7 @@ $(document).ready(function(){
 		names.splice(i, 1);
 		seriesOptions.splice(i, 1);
 		$('#item').html('');
+		createChart();
 		for (var i = 0; i < names.length; i++) {
 			var str = 
 			'<div class="elem">' +
@@ -113,9 +118,12 @@ $(document).ready(function(){
 	});
 
 	$('.btn-primary').click(function(){
-		var name = $('input').val();
+
+		var name = $('#stockname').val();
 		$('input').val('');
-		if (name !== '' && names.indexOf(name) === -1) {
+		
+		if ((name !== '') && (names.indexOf(name) === -1)) {
+			console.log(name);
 			socket.emit('add', name);
 		}
 	});

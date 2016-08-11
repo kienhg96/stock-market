@@ -4,17 +4,11 @@ block content
 	div#container
 	hr
 	div.container
-		div#item
-			//div.elem
-				span.name GOOG
-				button.btn.btn-danger Delete
-			//div.elem
-				span.name GOOG
-				button.btn.btn-danger Delete
-		hr
 		div.form-add.form-inline
-			input.form-control(placeholder="Stock code")
+			input#stockname.form-control(placeholder="Stock code")
 			button.btn.btn-primary Add
+		hr
+		div#item
 	script(src="/third-party/highstock/js/highstock.js")
 	script(src="/socket.io/socket.io.js")
 	script(src="/javascripts/index.js")

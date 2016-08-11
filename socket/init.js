@@ -8,7 +8,7 @@ module.exports = function(server) {
 			console.log('A user disconnected');
 		});
 		socket.on('add', function(data){
-			//console.log(data);
+			console.log(data);
 			if (global.names.indexOf(data) === -1) {
 				io.emit('new', data);
 				global.names.push(data);
